@@ -17,5 +17,8 @@ func init() {
 func main() {
 	beego.SetStaticPath("/static", "static")
 	beego.AddFuncMap("m2c", helper.M2C)
+	beego.AddFuncMap("randSize", helper.RandSize)
+	beego.AddFuncMap("lr", helper.LR)
+	beego.AddFuncMap("add", helper.Add)
 	beego.Run()
 }

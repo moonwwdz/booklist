@@ -14,13 +14,14 @@ type BookMonth struct {
 }
 
 type Book struct {
-	Id     int
-	Name   string    `valid:"Required"`
-	Title  string    `valid:"Required"`
-	Desc   string    `valid:"Required"`
-	Url    string    `valid:"Required"`
-	Start  time.Time `orm:"auto_now_add;type(datetime)"`
-	Finish time.Time `orm:"auto_now;type(datetime)"`
+	Id      int
+	Name    string    `valid:"Required"`
+	Title   string    `valid:"Required"`
+	Desc    string    `valid:"Required"`
+	Url     string    `valid:"Required"`
+	NoteUrl string    `valid:"Required"`
+	Start   time.Time `orm:"auto_now_add;type(datetime)"`
+	Finish  time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func init() {
@@ -30,6 +31,7 @@ func init() {
 func GetAll() *[]Book {
 	bookList := new([]Book)
 	num, err := orm.NewOrm().QueryTable("book").OrderBy("-finish").All(bookList)
+	// num, err := orm.NewOrm().QueryTable("book").All(bookList)
 	if err != nil {
 		fmt.Printf("Error: Returned Rows Num: %d, %s", num, err)
 	}

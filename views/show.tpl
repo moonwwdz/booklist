@@ -13,32 +13,52 @@
 <body>
 
 <div id="ss-links" class="ss-links">
-	{{range $index, $elem := .bookList}}
-	<a href="#november">{{$index | m2c}}</a>
+	{{range $index, $elem := .mList}}
+	<a href="#month-id-{{$elem.N}}">{{$elem.C}}</a>
 	{{end}}	
 </div>
 
 <div id="ss-container" class="ss-container">
+	{{range $index, $elemM := .mListDesc}}
 	<div class="ss-row">
 		<div class="ss-left">
-			<h2 id="november">November</h2>
+			<h2 id="month-id-{{$elemM.N}}">{{$elemM.E}}</h2>
 		</div>
 		<div class="ss-right">
-			<h2>9月</h2>
+			<h2>{{$elemM.C}}</h2>
 		</div>
 	</div>
-	<div class="ss-row ss-medium">
-		<div class="ss-left">
-			<a href="javascript:" class="ss-circle ss-circle-1">Typography Effects with CSS3 and jQuery</a>
+
+		{{$book := index $.bookList $elemM.N}}
+		{{range $i , $e := $book}}
+		<div class="ss-row {{randSize}}">
+			{{if $i|add|lr}}
+			<div class="ss-left">
+				<a href="javascript:" class="ss-circle" style="background-image:url({{$e.Url}})">{{$e.Title}}</a>
+			</div>
+			<div class="ss-right">
+				<h3>
+					<span>{{dateformat $e.Start "2006-01-02"}} ~ {{dateformat $e.Finish "2006-01-02"}}</span>
+					<a href="javascript:">{{$e.Name}}</a>
+					<p>{{$e.Desc}}</p>
+				</h3>
+			</div>
+			{{else}}
+			<div class="ss-left">
+					<h3>
+						<span>{{dateformat $e.Start "2006-01-02"}} ~ {{dateformat $e.Finish "2006-01-02"}}</span>
+						<a href="javascript:">{{$e.Name}}</a>
+					</h3>
+				</div>
+				<div class="ss-right">
+					<a href="javascript:" class="ss-circle" style="background-image:url({{$e.Url}})">{{$e.Title}}</a>
+				</div>
+			{{end}}
 		</div>
-		<div class="ss-right">
-			<h3>
-				<span>2017.09.26</span>
-				<a href="javascript:">嫌疑人X的献身</a>
-			</h3>
-		</div>
-	</div>
-	<div class="ss-row ss-large">
+		{{end}}
+
+	{{end}}
+	<!-- <div class="ss-row ss-large">
 		<div class="ss-left">
 			<h3>
 				<span>November 22, 2011</span>
@@ -106,7 +126,7 @@
 		<div class="ss-right">
 			<a href="javascript:" class="ss-circle ss-circle-7">Original Hover Effects with CSS3</a>
 		</div>
-	</div>
+	</div> -->
 
 </div>
 <script src="/static/js/jquery.min.js"></script>

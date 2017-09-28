@@ -1,7 +1,10 @@
 package controllers
 
 import (
+	"booklist/helper"
 	"booklist/models"
+	"sort"
+	"time"
 
 	"github.com/astaxie/beego"
 )
@@ -19,10 +22,27 @@ func (s *ShowController) Get() {
 		if b, ok := bList[int(month)]; ok {
 			bList[int(month)] = append(b, book)
 		} else {
-			bList[int(month)] = make([]models.Book, 0)
+			tmp := make([]models.Book, 0)
+			tmp = append(tmp, book)
+			bList[int(month)] = tmp
 		}
 	}
-	//fmt.Printf("%+v\n", (bList))
+
+	mList := make([]helper.MonthC, 0)
+	for i := 1; i <= 12; i++ {
+		tmpM := helper.MonthC{}
+		if _, ok := bList[i]; ok {
+			tmpM.N = i
+			tmpM.E = time.Month(i)
+			tmpM.C = helper.M2C(i)
+			mList = append(mList, tmpM)
+		}
+	}
+	s.Data["mList"] = mList
+	sort.Sort(helper.MonthCList(mList))
+	s.Data["mListDesc"] = mList
+
+	// fmt.Printf("%+v\n", sort.Sort(helper.MonthCList(mList)))
 	s.Data["bookList"] = bList
 	s.TplName = "show.tpl"
 }
