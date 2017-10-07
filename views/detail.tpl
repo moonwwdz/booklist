@@ -2,7 +2,7 @@
 <html>
 	<head>
 	<meta charset="utf-8" />
-	<title>facebook效应 (大卫·柯克帕特里克) - 来自 Kindle 伴侣</title>
+	<title> {{.bookname}} - 来自 moonwwdz 的Kindle</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="/static/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<link href="/static/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />

@@ -1,16 +1,18 @@
 package controllers
 
-import(
+import (
 	"booklist/helper"
-	"github.com/astaxie/beego"
 	"fmt"
+
+	"github.com/astaxie/beego"
 )
 
-type FormatController struct{
+type FormatController struct {
 	beego.Controller
 }
-func (c *FormatController) Get(){
-	s := "/home/wangc/go/src/booklist/clippings.txt"
+
+func (c *FormatController) Get() {
+	s := "/tmp/clippings.txt"
 	fmt.Println(s)
 	helper.ClippingAll(s)
 	c.TplName = "show.tpl"
