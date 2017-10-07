@@ -3,8 +3,12 @@ package controllers
 import (
 	"booklist/helper"
 	"booklist/models"
+	"fmt"
 	"sort"
+	"strconv"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 
 	"github.com/astaxie/beego"
 )
@@ -45,4 +49,94 @@ func (s *ShowController) Get() {
 	// fmt.Printf("%+v\n", sort.Sort(helper.MonthCList(mList)))
 	s.Data["bookList"] = bList
 	s.TplName = "show.tpl"
+}
+
+func (c *ShowController) Detail() {
+	id := c.Ctx.Input.Param(":id")
+	bookId, _ := strconv.Atoi(id)
+	book := models.GetBookById(bookId)
+	clippingList := models.GetAllByBookName(book.Name)
+
+	// fmt.Printf("%+v\n", clippingList)
+	c.Data["list"] = clippingList
+	c.Data["bookname"] = book.Name
+	c.TplName = "detail.tpl"
+}
+
+func (c *ShowController) List() {
+	bookList := models.GetAll()
+	c.Data["list"] = bookList
+	c.TplName = "list.tpl"
+}
+
+func (c *ShowController) GetAdd() {
+	c.TplName = "edit.tpl"
+}
+
+func (c *ShowController) PostAdd() {
+	book := models.Book{}
+	if err := c.ParseForm(&book); err != nil {
+		fmt.Printf("%#v\n", err)
+	}
+
+	sTime := c.Input().Get("book_start")
+	eTime := c.Input().Get("book_end")
+	formatTime := "2006-01-02 15:04:05"
+	loc, _ := time.LoadLocation("Local")
+	book.Start, _ = time.ParseInLocation(formatTime, sTime, loc)
+	book.Finish, _ = time.ParseInLocation(formatTime, eTime, loc)
+
+	h, _ := time.ParseDuration("8h")
+	book.Start = book.Start.Add(h)
+	book.Finish = book.Start.Add(h)
+
+	_, err := orm.NewOrm().Insert(&book)
+	if err != nil {
+		fmt.Printf("%#v\n", err)
+	}
+
+	fmt.Printf("%#v\n", book)
+	c.Redirect("/list", 302)
+}
+
+func (c *ShowController) GetEdit() {
+	id := c.Ctx.Input.Param(":id")
+	bookId, _ := strconv.Atoi(id)
+	book := models.GetBookById(bookId)
+	//	fmt.Printf("%#v\n", book)
+	c.Data["book"] = book
+	c.Data["editFlag"] = true
+	c.TplName = "edit.tpl"
+}
+
+func (c *ShowController) PostEdit() {
+	book := models.Book{}
+	if err := c.ParseForm(&book); err != nil {
+		fmt.Printf("%#v\n", err)
+	}
+	id := c.Ctx.Input.Param(":id")
+	book.Id, _ = strconv.Atoi(id)
+	sTime := c.Input().Get("book_start")
+	eTime := c.Input().Get("book_end")
+	formatTime := "2006-01-02 15:04:05"
+	loc, _ := time.LoadLocation("Local")
+	var err error
+	fmt.Println(sTime)
+	book.Start, err = time.ParseInLocation(formatTime, sTime, loc)
+	if err != nil {
+		fmt.Printf("Start  Time : %#v\n", err)
+	}
+	fmt.Println(eTime)
+	book.Finish, err = time.ParseInLocation(formatTime, eTime, loc)
+	if err != nil {
+		fmt.Printf("Finish Time : %#v\n", err)
+	}
+
+	_, err = orm.NewOrm().Update(&book)
+	if err != nil {
+		fmt.Printf("%#v\n", err)
+	}
+
+	fmt.Printf("%#v\n", book)
+	c.Redirect("/list/edit/"+id, 302)
 }

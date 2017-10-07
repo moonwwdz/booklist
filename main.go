@@ -20,5 +20,6 @@ func main() {
 	beego.AddFuncMap("randSize", helper.RandSize)
 	beego.AddFuncMap("lr", helper.LR)
 	beego.AddFuncMap("add", helper.Add)
+	beego.AddFuncMap("t2w", helper.Time2Week)
 	beego.Run()
 }

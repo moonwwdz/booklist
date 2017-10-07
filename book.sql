@@ -4,12 +4,23 @@ CREATE TABLE book(
    TITLE          TEXT    NOT NULL,
    DESC           TEXT    NOT NULL,
    URL            TEXT    NOT NULL,
-   NOTEURL        TEXT    NOT NULL,
+   NOTEURL        TEXT    default "",
    PROCESS        INT     default 0,
    SCORE          REAL    default 3.5,
    START          TIMESTAMP default (datetime('now', 'localtime')),
    FINISH         TIMESTAMP default (datetime('now', 'localtime'))
 );
+create unique index book_name on book(name);
+create table clipping(
+    ID INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL,
+    book_id int default null,
+    book_name text default null,
+    postion text default null,
+    content text default null,
+    comment text default null,
+    mark_time  TIMESTAMP
+    );
+create unique index book_clipping_c on clipping(book_name,postion,content);
 
 INSERT INTO book  (NAME,TITLE,URL,DESC) VALUES ("解忧杂货店","无论多少苦恼，都会解决的","/static/images/11.jpg","僻静的街道旁有一家杂货店，只要写下烦恼投进店前门卷帘门的投信口，第二天就会在店后的牛奶箱里得到回答：因男友身患绝症，年轻女孩静子在爱情与梦想间徘徊；克郎为了音乐梦想离家漂泊，却在现实中寸步难行；少年浩介面临家庭巨变，挣扎在亲情与未来的迷茫中……
 					他们将困惑写成信投进杂货店，奇妙的事情随即不断发生。生命中的一次偶然交会，将如何演绎出截然不同的人生？");

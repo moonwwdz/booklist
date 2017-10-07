@@ -34,7 +34,7 @@
 		<div class="ss-row {{randSize}}">
 			{{if $i|add|lr}}
 			<div class="ss-left">
-				<a href="javascript:" class="ss-circle" style="background-image:url({{$e.Url}})">{{$e.Title}}</a>
+				<a href="/detail/{{$e.Id}}" class="ss-circle" style="background-image:url({{$e.Url}})">{{$e.Title}}</a>
 			</div>
 			<div class="ss-right">
 				<h3>
@@ -51,7 +51,7 @@
 					</h3>
 				</div>
 				<div class="ss-right">
-					<a href="javascript:" class="ss-circle" style="background-image:url({{$e.Url}})">{{$e.Title}}</a>
+					<a href="/detail/{{$e.Id}}" class="ss-circle" style="background-image:url({{$e.Url}})">{{$e.Title}}</a>
 				</div>
 			{{end}}
 		</div>
