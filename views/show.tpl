@@ -40,7 +40,7 @@
 				<h3>
 					<span>{{dateformat $e.Start "2006-01-02"}} ~ {{dateformat $e.Finish "2006-01-02"}}</span>
 					<a href="javascript:">{{$e.Name}}</a>
-					<p>{{$e.Desc}}</p>
+					<p>{{str2html $e.Desc}}</p>
 				</h3>
 			</div>
 			{{else}}
@@ -48,7 +48,7 @@
 					<h3>
 						<span>{{dateformat $e.Start "2006-01-02"}} ~ {{dateformat $e.Finish "2006-01-02"}}</span>
 						<a href="javascript:">{{$e.Name}}</a>
-						<p>{{$e.Desc}}</p>
+						<p>{{str2html $e.Desc}}</p>
 					</h3>
 				</div>
 				<div class="ss-right">
