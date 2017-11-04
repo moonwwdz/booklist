@@ -34,7 +34,7 @@
 			<div class="form-group">
 				<label for="lastname" class="col-sm-2 control-label">简介</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="" placeholder="请输入简介" name="book_desc" value="{{.book.Desc}}">
+					<textarea name="book_desc" class="form-control" id="" placeholder="请输入简介" rows="10">{{.book.Desc}}</textarea>
 				</div>
 			</div>
 			<div class="form-group">

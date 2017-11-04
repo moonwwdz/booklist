@@ -79,13 +79,12 @@ func (c *ShowController) PostAdd() {
 		fmt.Printf("%#v\n", err)
 	}
 
-	sTime := c.Input().Get("book_start")
-	eTime := c.Input().Get("book_end")
+	sTime := helper.UtcFormat(c.Input().Get("book_start"))
+	eTime := helper.UtcFormat(c.Input().Get("book_end"))
 	formatTime := "2006-01-02 15:04:05"
 	loc, _ := time.LoadLocation("Local")
 	book.Start, _ = time.ParseInLocation(formatTime, sTime, loc)
 	book.Finish, _ = time.ParseInLocation(formatTime, eTime, loc)
-
 	h, _ := time.ParseDuration("8h")
 	book.Start = book.Start.Add(h)
 	book.Finish = book.Start.Add(h)
@@ -116,8 +115,8 @@ func (c *ShowController) PostEdit() {
 	}
 	id := c.Ctx.Input.Param(":id")
 	book.Id, _ = strconv.Atoi(id)
-	sTime := c.Input().Get("book_start")
-	eTime := c.Input().Get("book_end")
+	sTime := helper.UtcFormat(c.Input().Get("book_start"))
+	eTime := helper.UtcFormat(c.Input().Get("book_end"))
 	formatTime := "2006-01-02 15:04:05"
 	loc, _ := time.LoadLocation("Local")
 	var err error
@@ -126,6 +125,8 @@ func (c *ShowController) PostEdit() {
 	if err != nil {
 		fmt.Printf("Start  Time : %#v\n", err)
 	}
+	h, _ := time.ParseDuration("8h")
+	book.Start = book.Start.Add(h)
 	fmt.Println(eTime)
 	book.Finish, err = time.ParseInLocation(formatTime, eTime, loc)
 	if err != nil {
@@ -137,6 +138,6 @@ func (c *ShowController) PostEdit() {
 		fmt.Printf("%#v\n", err)
 	}
 
-	fmt.Printf("%#v\n", book)
+	// fmt.Printf("%#v\n", book)
 	c.Redirect("/list/edit/"+id, 302)
 }

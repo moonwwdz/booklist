@@ -2,6 +2,7 @@ package helper
 
 import (
 	"math/rand"
+	"regexp"
 	"time"
 )
 
@@ -40,4 +41,10 @@ func Time2Week(t time.Time) string {
 	}
 	return t.Weekday().String()
 
+}
+
+func UtcFormat(timeStr string) string {
+	timeReg := regexp.MustCompile(`\d{4}-\d{1,2}-\d{1,2} \d{2}:\d{2}:\d{2}`)
+	timeFormat := timeReg.FindString(timeStr)
+	return timeFormat
 }
