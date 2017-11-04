@@ -14,9 +14,9 @@
 
 <body>
 	{{if .editFlag}}
-		<form class="form-horizontal" role="form" method="post" action="/list/edit/{{.book.Id}}">
+		<form class="form-horizontal" role="form" enctype="multipart/form-data"  method="post" action="/list/edit/{{.book.Id}}">
 	{{else}}
-		<form class="form-horizontal" role="form" method="post" action="/list/add">
+		<form class="form-horizontal" role="form" enctype="multipart/form-data"  method="post" action="/list/add">
 	{{end}}
 			<div class="form-group">
 				<label for="firstname" class="col-sm-2 control-label">书名</label>
@@ -41,6 +41,7 @@
 				<label for="firstname" class="col-sm-2 control-label">书图</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" id="" placeholder="请输入书图" name="book_url" value="{{.book.Url}}">
+					<input type="file" name="book_img">
 				</div>
 			</div>
 			<div class="form-group">

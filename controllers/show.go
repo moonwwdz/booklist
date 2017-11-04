@@ -4,6 +4,7 @@ import (
 	"booklist/helper"
 	"booklist/models"
 	"fmt"
+	"os"
 	"sort"
 	"strconv"
 	"time"
@@ -89,7 +90,20 @@ func (c *ShowController) PostAdd() {
 	book.Start = book.Start.Add(h)
 	book.Finish = book.Start.Add(h)
 
-	_, err := orm.NewOrm().Insert(&book)
+	//upload img to server then upload it to qiniu
+	f, handle, err := c.GetFile("book_img")
+	if err != nil {
+		// log.Fatal("getfile err ", err)
+	} else {
+		defer f.Close()
+		fmt.Println(handle.Filename)
+		c.SaveToFile("book_img", "/tmp/"+handle.Filename)
+		imgUrl := helper.UploadFileToQiniu(handle.Filename)
+		os.Remove("/tmp/" + handle.Filename)
+		book.Url = imgUrl
+	}
+
+	_, err = orm.NewOrm().Insert(&book)
 	if err != nil {
 		fmt.Printf("%#v\n", err)
 	}
@@ -115,29 +129,40 @@ func (c *ShowController) PostEdit() {
 	}
 	id := c.Ctx.Input.Param(":id")
 	book.Id, _ = strconv.Atoi(id)
+	//get time from utc time str,format it for normal
 	sTime := helper.UtcFormat(c.Input().Get("book_start"))
 	eTime := helper.UtcFormat(c.Input().Get("book_end"))
 	formatTime := "2006-01-02 15:04:05"
 	loc, _ := time.LoadLocation("Local")
 	var err error
-	fmt.Println(sTime)
 	book.Start, err = time.ParseInLocation(formatTime, sTime, loc)
 	if err != nil {
 		fmt.Printf("Start  Time : %#v\n", err)
 	}
+	//don't understand why have 8 hours have added to start
 	h, _ := time.ParseDuration("8h")
 	book.Start = book.Start.Add(h)
-	fmt.Println(eTime)
 	book.Finish, err = time.ParseInLocation(formatTime, eTime, loc)
 	if err != nil {
 		fmt.Printf("Finish Time : %#v\n", err)
 	}
 
+	//upload img to server then upload it to qiniu
+	f, handle, err := c.GetFile("book_img")
+	if err != nil {
+		// log.Fatal("getfile err ", err)
+	} else {
+		defer f.Close()
+		fmt.Println(handle.Filename)
+		c.SaveToFile("book_img", "/tmp/"+handle.Filename)
+		imgUrl := helper.UploadFileToQiniu(handle.Filename)
+		os.Remove("/tmp/" + handle.Filename)
+		book.Url = imgUrl
+	}
 	_, err = orm.NewOrm().Update(&book)
 	if err != nil {
 		fmt.Printf("%#v\n", err)
 	}
-
 	// fmt.Printf("%#v\n", book)
 	c.Redirect("/list/edit/"+id, 302)
 }
